@@ -34,4 +34,4 @@ build/
 ### node modules###
 frontend/node_modules/
 #env
-.application.properties
+src/main/resources/application.properties
