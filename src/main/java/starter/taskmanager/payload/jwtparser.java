@@ -4,7 +4,9 @@ import lombok.Getter;
 public class jwtparser {
     private String token;
     private String type="bearer";
-    public jwtparser(String token) {
+    private long userid;
+    public jwtparser(String token,long userid) {
         this.token = token;
+        this.userid=userid;
     }
 }

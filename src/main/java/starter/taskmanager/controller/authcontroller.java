@@ -15,10 +15,12 @@ import starter.taskmanager.payload.jwtparser;
 import starter.taskmanager.payload.userdto;
 import starter.taskmanager.security.JwtProvider;
 import starter.taskmanager.service.userservice;
+import starter.taskmanager.repository.userrepo;
 @RestController
 @RequestMapping("api/auth/")
 public class authcontroller {
-
+    @Autowired 
+    private userrepo userrepo;
    
     @Autowired
     private userservice userservice;
@@ -37,6 +39,10 @@ public class authcontroller {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token=jwtProvider.generateToken(authentication);
-        return ResponseEntity.ok(new jwtparser(token));
+        var user = userrepo.findByEmail(authentication.getName());
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+        return ResponseEntity.ok(new jwtparser(token, user.getId()));
     } 
 }
