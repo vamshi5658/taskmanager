@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +17,11 @@ import starter.taskmanager.execpt.apiexecpt;
 @Component
 public class JwtProvider {
 
-    private static final String SECRET =
-        "mySuperSecretKeyForJwtAuthenticationMustBeLongEnough123456789";
+    private final Key key;
 
-    private final Key key =
-        Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+    public JwtProvider(@Value("${app.jwt.secret}") String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String generateToken(Authentication authentication) {
 

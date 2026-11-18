@@ -1,8 +1,7 @@
-const API_BASE = '';
-// proxy in package.json sends requests to backend at localhost:8080
+const API_BASE = (process.env.REACT_APP_API_URL || '').replace(/\/+$/, '');
 
 export async function register(user){
-  const res = await fetch('/api/auth/register', {
+  const res = await fetch(`${API_BASE}/api/auth/register`, {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify(user)
@@ -12,7 +11,7 @@ export async function register(user){
 }
 
 export async function login(user){
-  const res = await fetch('/api/auth/login', {
+  const res = await fetch(`${API_BASE}/api/auth/login`, {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify(user)
@@ -23,7 +22,7 @@ export async function login(user){
 }
 
 export async function getTasks(token, userid){
-  const res = await fetch(`/api/${userid}/tasks`, {
+  const res = await fetch(`${API_BASE}/api/${userid}/tasks`, {
     headers: { 'Authorization': `Bearer ${token}` }
   });
   if(!res.ok) throw new Error('Failed to load tasks');
@@ -31,7 +30,7 @@ export async function getTasks(token, userid){
 }
 
 export async function createTask(token, userid, task){
-  const res = await fetch(`/api/${userid}/tasks`, {
+  const res = await fetch(`${API_BASE}/api/${userid}/tasks`, {
     method: 'POST',
     headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` },
     body: JSON.stringify(task)
@@ -41,7 +40,7 @@ export async function createTask(token, userid, task){
 }
 
 export async function deleteTask(token, userid, taskid){
-  const res = await fetch(`/api/${userid}/tasks/${taskid}`, {
+  const res = await fetch(`${API_BASE}/api/${userid}/tasks/${taskid}`, {
     method: 'DELETE',
     headers: { 'Authorization': `Bearer ${token}` }
   });
